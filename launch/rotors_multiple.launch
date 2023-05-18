@@ -4,7 +4,8 @@
     <arg name="enable_thrust_control" default="false" />
     <arg name="sim_type"              default="rotors" />
  
-    <arg name="world_name"            default="$(find rotors_gazebo)/worlds/city12_tiltedbuildings.world" />
+    <arg name="world_name"            default="$(find rotors_gazebo)/worlds/caric_building.world" />
+
     <arg name="enable_logging"        default="false" />
     <arg name="enable_ground_truth"   default="true" />
     <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
@@ -24,6 +25,22 @@
         <arg name="paused"            value="$(arg paused)" />
         <arg name="gui"               value="$(arg gui)" />
         <arg name="verbose"           value="$(arg verbose)" />
+    </include>
+
+
+    <!-- Spawning the ground station -->
+    <include file="$(find tcc)/launch/spawn_gcs.launch">
+
+        <arg name="namespace"         value="gcs" />
+        <arg name="model"             value="$(find rotors_description)/urdf/gcs.xacro" />
+        
+        <arg name="ppcom_id"          value="gcs" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+
+        <arg name="x"                 value="0.0" />
+        <arg name="y"                 value="5.0" />
+        <arg name="z"                 value="10.0" />
+
     </include>
 
 
@@ -51,7 +68,7 @@
 
         <arg name="ppcom_id"          value="firefly2" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
-        <arg name="start_x"           value="20.0" />
+        <arg name="start_x"           value="12.0" />
         <arg name="start_y"           value="5.0" />
 
     </include>
@@ -85,6 +102,7 @@
         <arg name="start_y"           value="-10.0" />
 
     </include>
+
 
     <!-- Spawning another drone -->
     <include file="$(find tcc)/launch/rotors_single.launch">

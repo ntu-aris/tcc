@@ -15,6 +15,7 @@
 #include <geometry_msgs/Vector3.h>
 // #include "ooqp_eigen_interface/OoqpEigenInterface.hpp"
 // #include "ooqp_eigen_interface/ooqpei_gtest_eigen.hpp"
+#include "tcc/Stop.h"
 
 typedef Eigen::Triplet<double> Trip;
 ros::Publisher rpyt_command_pub;
@@ -56,6 +57,13 @@ Eigen::VectorXd sim_state_ = Eigen::MatrixXd::Constant(6, 1, 0);
 bool mpc_sim_;
 float thrust_offset_=1.5, thrust_coefficient_=70, maximum_thrust_=90, minimum_thrust_=10;
 bool thrust_control_=true;
+
+int stop_control = false;
+bool stop_srv_cb(tcc::Stop::Request &req, tcc::Stop::Response &res)
+{
+  printf("%s\n", req.message.c_str());
+  stop_control = true;
+}
 
 int main(int argc, char** argv){
   ros::init(argc, argv, "tcc");
@@ -101,6 +109,9 @@ int main(int argc, char** argv){
     trajectory_sub = nh.subscribe<trajectory_msgs::MultiDOFJointTrajectory>(
                                  "command/trajectory", 10, trajectory_cb);     
   }
+
+  ros::ServiceServer stop_srv = nh.advertiseService("stop", stop_srv_cb);
+
   ros::Subscriber odom_sub = nh.subscribe<nav_msgs::Odometry>("vins_estimator/odometry", 10, odom_cb);
 
   ros::Subscriber offset_sub = nh.subscribe<geometry_msgs::Vector3>("NTU_internal/offsets", 10, offsets_cb);
@@ -352,6 +363,10 @@ void CtrloopCallback(const ros::TimerEvent&)
       }      
       rpyrt_msg.thrust.z = _thrust_cmd;
     }
+
+    if (stop_control)
+      rpyrt_msg.thrust.z = 0;
+
     if (sim_type_!="vins_st"&&sim_type_!="sim_st"){
       rpyt_command_pub.publish(rpyrt_msg);
     } else if (sim_type_=="sim_st"){ //set up the control interface for st
