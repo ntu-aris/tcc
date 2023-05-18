@@ -20,9 +20,6 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Eigen3 REQUIRED)
 
-set(Eigen3_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
-
-
 
 include_directories(
 	include
@@ -33,6 +30,17 @@ include_directories(
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
+
+## Generate services in the 'srv' folder
+add_service_files(
+  FILES
+  Stop.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs  # Or other packages containing msgs
+)
 
 generate_dynamic_reconfigure_options(
    cfg/Param.cfg
