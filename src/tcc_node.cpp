@@ -367,7 +367,7 @@ void CtrloopCallback(const ros::TimerEvent&)
 
     if (stop_control)
     {
-      printf("STOPPING CONTRO...L\n");
+      // printf("STOPPING CONTROL\n");
       rpyrt_msg.thrust.z = 0;
     }
 
