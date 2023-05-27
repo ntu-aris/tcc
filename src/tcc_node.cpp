@@ -58,11 +58,12 @@ bool mpc_sim_;
 float thrust_offset_=1.5, thrust_coefficient_=70, maximum_thrust_=90, minimum_thrust_=10;
 bool thrust_control_=true;
 
-int stop_control = false;
+bool stop_control = false;
 bool stop_srv_cb(tcc::Stop::Request &req, tcc::Stop::Response &res)
 {
-  printf("%s\n", req.message.c_str());
   stop_control = true;
+  res.result = 1;
+  return true;
 }
 
 int main(int argc, char** argv){
@@ -365,7 +366,10 @@ void CtrloopCallback(const ros::TimerEvent&)
     }
 
     if (stop_control)
+    {
+      // printf("STOPPING CONTROL\n");
       rpyrt_msg.thrust.z = 0;
+    }
 
     if (sim_type_!="vins_st"&&sim_type_!="sim_st"){
       rpyt_command_pub.publish(rpyrt_msg);
