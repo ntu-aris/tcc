@@ -56,9 +56,11 @@ Eigen::MatrixXd z_reference_(3*200, 1);
 Eigen::VectorXd sim_state_ = Eigen::MatrixXd::Constant(6, 1, 0);
 bool mpc_sim_;
 float thrust_offset_=1.5, thrust_coefficient_=70, maximum_thrust_=90, minimum_thrust_=10;
-bool thrust_control_=true;
-
+bool thrust_control_=true, got_first_cmd_ = false;;
+enum moveState { holdPos, yawOnly, moving, idle };
+moveState droneState = idle;
 bool stop_control = false;
+bool hold_pos_ = true;
 bool stop_srv_cb(tcc::Stop::Request &req, tcc::Stop::Response &res)
 {
   stop_control = true;
@@ -145,7 +147,7 @@ void trajectory_cb(const trajectory_msgs::MultiDOFJointTrajectory::ConstPtr& msg
   }
   //std::cout<<"z reference is"<<z_reference_<<"\n";
   ROS_INFO_ONCE("Got first trajectory message!");
-
+  if (droneState == idle) droneState = moving;
 }
 
 void offsets_cb(const geometry_msgs::Vector3::ConstPtr& msg)
@@ -211,7 +213,7 @@ void odom_cb(const nav_msgs::Odometry::ConstPtr& msg)
                                           msg->pose.pose.orientation.y, msg->pose.pose.orientation.z);    
     get_dcm_from_q(current_.R, current_Quat);
   }
-  ROS_INFO_ONCE("TCC Got first odom message!");
+  ROS_INFO_ONCE("[Trajectory Tracking Control] Got first odom message!");
 
 }
 
@@ -240,16 +242,25 @@ Eigen::Vector3f prtcontrol(fullstate_t& cmd, fullstate_t& current)
     if (PosErrorAccumulated_(i)>posErrAccLimit_) PosErrorAccumulated_(i) = posErrAccLimit_;
     else if (PosErrorAccumulated_(i)<-posErrAccLimit_) PosErrorAccumulated_(i) = -posErrAccLimit_;
   }
+  double position_control = 1.0;
+  double velocity_control = 1.0;
+  if (cmd.pos.norm()<0.01) {
+    position_control = 0.0;
+    if (cmd.vel.norm()<0.01) {
+      velocity_control = 0.0;
+    }
+    
+  }
   Eigen::Vector3f tarAcc(0,0,0);
 
-  tarAcc(0) = pow(CtrlOmega(0)/CtrlEpsilon(0), 2)*(cmd.pos(0)-current.pos(0)) +
-             2*CtrlZita(0)*CtrlOmega(0)/CtrlEpsilon(0)*(cmd.vel(0)-current.vel(0)) + 
+  tarAcc(0) = pow(CtrlOmega(0)/CtrlEpsilon(0), 2)*(cmd.pos(0)-current.pos(0))*position_control +
+             2*CtrlZita(0)*CtrlOmega(0)/CtrlEpsilon(0)*(cmd.vel(0)-current.vel(0))*velocity_control + 
              cmd.acc(0) + k_I_(0)*PosErrorAccumulated_(0);
-  tarAcc(1) = pow(CtrlOmega(1)/CtrlEpsilon(1), 2)*(cmd.pos(1)-current.pos(1)) +
-             2*CtrlZita(1)*CtrlOmega(1)/CtrlEpsilon(1)*(cmd.vel(1)-current.vel(1)) + 
+  tarAcc(1) = pow(CtrlOmega(1)/CtrlEpsilon(1), 2)*(cmd.pos(1)-current.pos(1))*position_control +
+             2*CtrlZita(1)*CtrlOmega(1)/CtrlEpsilon(1)*(cmd.vel(1)-current.vel(1))*velocity_control + 
              cmd.acc(1) + k_I_(1)*PosErrorAccumulated_(1);
-  tarAcc(2) = pow(CtrlOmega(2)/CtrlEpsilon(2), 2)*(cmd.pos(2)-current.pos(2)) +
-             2*CtrlZita(2)*CtrlOmega(2)/CtrlEpsilon(2)*(cmd.vel(2)-current.vel(2)) + 
+  tarAcc(2) = pow(CtrlOmega(2)/CtrlEpsilon(2), 2)*(cmd.pos(2)-current.pos(2))*position_control +
+             2*CtrlZita(2)*CtrlOmega(2)/CtrlEpsilon(2)*(cmd.vel(2)-current.vel(2))*velocity_control + 
              cmd.acc(2) +  + k_I_(2)*PosErrorAccumulated_(2) + ONE_G;
 
   // std::cout<<"velocity command"<<cmd.vel<<"\n"; 
@@ -284,8 +295,24 @@ Eigen::Vector3f prtcontrol(fullstate_t& cmd, fullstate_t& current)
 
 void CtrloopCallback(const ros::TimerEvent&)
 {
-  if (fabs((ros::Time::now() - cmd_.timestamp).toSec()) < 0.1 && 
-    (ros::Time::now()-current_.timestamp).toSec()<=0.11 && 
+  if (droneState == idle) return;  
+  if (fabs((ros::Time::now() - cmd_.timestamp).toSec()) > 0.1 && droneState!=holdPos)
+  {
+    droneState = holdPos;
+    cmd_.pos = current_.pos;
+    cmd_.R = current_.R;
+    cmd_.vel.setZero();
+    cmd_.acc.setZero();
+  } else if (fabs((ros::Time::now() - cmd_.timestamp).toSec()) < 0.1 && droneState != yawOnly
+    && cmd_.pos.norm()<0.01 && cmd_.vel.norm()<0.01 && cmd_.acc.norm()<0.01){ //only attitude change requested
+    droneState = yawOnly;
+    cmd_.pos = current_.pos;
+  } else if (fabs((ros::Time::now() - cmd_.timestamp).toSec()) < 0.1 
+    && ((cmd_.pos - current_.pos).norm()>0.05 || cmd_.vel.norm()>0.01 || cmd_.acc.norm()>0.01)) {
+    droneState = moving;
+  }
+
+  if ((ros::Time::now()-current_.timestamp).toSec()<=0.10 && 
     !std::isnan(cmd_.pos(0)) && !std::isnan(current_.pos(0))){
     //do control
     ROS_INFO_ONCE("started control!");
@@ -345,7 +372,7 @@ void CtrloopCallback(const ros::TimerEvent&)
     rpyrt_msg.thrust.x = 0;
     rpyrt_msg.thrust.y = 0;
     if (sim_type_=="rotors"){  //for simulation with ROTORS only
-      rpyrt_msg.thrust.z = in_loop_cmd.T*70.75; //70 for unity, 43.75 for rotors      
+      rpyrt_msg.thrust.z = in_loop_cmd.T*89.75; //70 for unity, 43.75 for rotors      
     }else if (sim_type_=="unity") {
       rpyrt_msg.thrust.z = in_loop_cmd.T*70; //70 for unity, 43.75 for rotors 
     }else if (sim_type_=="vins_dji"||(sim_type_=="vinsfusion_dji_mini"&&!thrust_control_)||
