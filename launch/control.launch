@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-<arg name="drone_name" default="firefly1" />
+<arg name="drone_name" default="firefly" />
 <!-- <arg name="sim_type" default="vinsfusion_dji_mini" /> -->
 <arg name="sim_type" default="vicon_dji_mini" />
 
@@ -9,7 +9,7 @@
 
 <!-- <arg name="odom_topic" default="/vins_estimator/odom_correct" /> -->
 <arg name="odom_topic" default="vins_estimator/odometry" />
-<arg name="trajectory_topic" default="/firefly1/command/trajectory" />
+<arg name="trajectory_topic" default="/firefly/command/trajectory" />
 
 <arg name="enable_thrust_control" default="false" />
 <arg name="fake_odom" default="false" />

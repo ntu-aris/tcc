@@ -48,10 +48,10 @@
     <include file="$(find tcc)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly1" />
+        <arg name="namespace"         value="jurong" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
 
-        <arg name="ppcom_id"          value="firefly1" />
+        <arg name="ppcom_id"          value="jurong" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="start_x"           value="0.0" />
         <arg name="start_y"           value="-1.0" />
@@ -63,10 +63,10 @@
     <include file="$(find tcc)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly2" />
+        <arg name="namespace"         value="raffles" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
 
-        <arg name="ppcom_id"          value="firefly2" />
+        <arg name="ppcom_id"          value="raffles" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="start_x"           value="12.0" />
         <arg name="start_y"           value="5.0" />
@@ -78,10 +78,10 @@
     <include file="$(find tcc)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly3" />
+        <arg name="namespace"         value="sentosa" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
 
-        <arg name="ppcom_id"          value="firefly3" />
+        <arg name="ppcom_id"          value="sentosa" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="start_x"           value="0.0" />
         <arg name="start_y"           value="-5.0" />
@@ -93,10 +93,10 @@
     <include file="$(find tcc)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly4" />
+        <arg name="namespace"         value="changi" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
 
-        <arg name="ppcom_id"          value="firefly4" />
+        <arg name="ppcom_id"          value="changi" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="start_x"           value="0.0" />
         <arg name="start_y"           value="-10.0" />
@@ -108,10 +108,10 @@
     <include file="$(find tcc)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly5" />
+        <arg name="namespace"         value="nanyang" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
 
-        <arg name="ppcom_id"          value="firefly5" />
+        <arg name="ppcom_id"          value="nanyang" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="start_x"           value="2.0" />
         <arg name="start_y"           value="-15.0" />
