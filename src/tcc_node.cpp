@@ -84,6 +84,31 @@ int main(int argc, char** argv){
   }
   pnh.getParam("mpc_sim", mpc_sim_);
   pnh.getParam("enable_thrust_control", thrust_control_);
+  double _CtrlOmega_xy, _CtrlOmega_z;
+  pnh.getParam("CtrlOmega_xy", _CtrlOmega_xy);
+  pnh.getParam("CtrlOmega_z", _CtrlOmega_z);
+  CtrlOmega(0) = _CtrlOmega_xy;
+  CtrlOmega(1) = _CtrlOmega_xy;
+  CtrlOmega(2) = _CtrlOmega_z;
+
+  pnh.getParam("PosErrorAccumulatedLimit_xyz", posErrAccLimit_);
+
+  double _Pos_ki_xy, _Pos_ki_z;
+  pnh.getParam("Pos_ki_xy", _Pos_ki_xy);
+  pnh.getParam("Pos_ki_z", _Pos_ki_z);
+  k_I_(0) = _Pos_ki_xy;
+  k_I_(1) = _Pos_ki_xy;
+  k_I_(2) = _Pos_ki_z;
+
+  pnh.getParam("k_p_yaw_", k_p_yaw_);
+  pnh.getParam("k_I_yaw_", k_I_yaw_);
+  pnh.getParam("yawErrorAccumLim_", yawErrorAccumLim_);
+  pnh.getParam("thrust_", thrust_);
+  double tmp_angle, tmp_yaw_rate;
+  pnh.getParam("max_angle_", tmp_angle);
+  pnh.getParam("max_yaw_rate_", tmp_yaw_rate);
+  max_yaw_rate_ = tmp_yaw_rate/180.0*3.1415927;
+  max_roll_pitch_angle_ = tmp_angle/180.0*3.1415927;
 
   if(sim_type_!="rotors" && sim_type_!="dji" && sim_type_!="vins_dji" && sim_type_!="vins_st" && 
     sim_type_!="sim_st" && sim_type_!="vinsfusion_dji_mini" && sim_type_!="vicon_dji_mini"
@@ -480,8 +505,8 @@ void Paramcallback(tcc::ParamConfig &config, uint32_t level)
     thrust_ = config.thrust_;
     cost_v_ =  config.mpc_vel_weight_;
     yawErrorAccumLim_ = config.yawErrorAccumLim_;
-    max_roll_pitch_angle_ = config.max_angle_/180*3.1415927;
-    max_yaw_rate_ = config.max_yaw_rate_/180*3.1415927;
+    max_roll_pitch_angle_ = config.max_angle_/180.0*3.1415927;
+    max_yaw_rate_ = config.max_yaw_rate_/180.0*3.1415927;
 
     thrust_offset_ = config.dji_thrust_offset;  //mq
     thrust_coefficient_ = config.dji_thrust_coefficient;
