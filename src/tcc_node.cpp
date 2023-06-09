@@ -397,7 +397,7 @@ void CtrloopCallback(const ros::TimerEvent&)
     rpyrt_msg.thrust.x = 0;
     rpyrt_msg.thrust.y = 0;
     if (sim_type_=="rotors"){  //for simulation with ROTORS only
-      rpyrt_msg.thrust.z = in_loop_cmd.T*89.75; //70 for unity, 43.75 for rotors      
+      rpyrt_msg.thrust.z = in_loop_cmd.T*thrust_; //70 for unity, 43.75 for rotors      
     }else if (sim_type_=="unity") {
       rpyrt_msg.thrust.z = in_loop_cmd.T*70; //70 for unity, 43.75 for rotors 
     }else if (sim_type_=="vins_dji"||(sim_type_=="vinsfusion_dji_mini"&&!thrust_control_)||

@@ -21,7 +21,7 @@ namespace mppi_control {
 
 
         InLoopCmdGen(float _hover_thrust = 0.5) {
-            std::cout << "hover_thrust: " << _hover_thrust << std::endl;
+            // std::cout << "hover_thrust: " << _hover_thrust << std::endl;
             hover_thrust = _hover_thrust;
             last_body_z << 0.0, 0.0, 1.0;
             last_body_x << 1.0, 0.0, 0.0;

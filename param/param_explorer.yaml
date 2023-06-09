@@ -7,7 +7,7 @@ Pos_ki_z: 0.07
 k_p_yaw_: 2.0
 k_I_yaw_: 0.02
 yawErrorAccumLim_: 1.57
-thrust_: 0
+thrust_: 89.75
 max_angle_: 15
 max_yaw_rate_: 60
 
