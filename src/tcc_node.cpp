@@ -42,7 +42,7 @@ Eigen::Vector3f PosErrorAccumulated_(0, 0, 0);
 Eigen::Vector3f k_I_(0.02, 0.02, 0.15);
 mppi_control::InLoopCmdGen InLoopCmdGen_(0.19); //for st, hover throttle is roughly 40%
 //for mini drone with dji n3, hover throttle is roughly 19%
-float posErrAccLimit_ = 10.0, acc_xy_limit_=2.0;
+float posErrAccLimit_ = 10.0, acc_xy_limit_=10.0;
 float k_p_yaw_=0.2, k_I_yaw_=0.2;
 float yawErrorAccum_ = 0, yawErrorAccumLim_ = 3.1415927;
 float max_roll_pitch_angle_ = 15/180*3.1415927, max_yaw_rate_ = 40/180*3.1415927;
@@ -90,6 +90,13 @@ int main(int argc, char** argv){
   CtrlOmega(0) = _CtrlOmega_xy;
   CtrlOmega(1) = _CtrlOmega_xy;
   CtrlOmega(2) = _CtrlOmega_z;
+
+  double _CtrlZita_xy, _CtrlZita_z;
+  pnh.getParam("CtrlZita_xy", _CtrlZita_xy);
+  pnh.getParam("CtrlZita_z", _CtrlZita_z);
+  CtrlZita(0) = _CtrlZita_xy;
+  CtrlZita(1) = _CtrlZita_xy;
+  CtrlZita(2) = _CtrlZita_z;
 
   pnh.getParam("PosErrorAccumulatedLimit_xyz", posErrAccLimit_);
 
@@ -494,6 +501,9 @@ void Paramcallback(tcc::ParamConfig &config, uint32_t level)
     CtrlOmega(0) = config.CtrlOmega_xy;
     CtrlOmega(1) = config.CtrlOmega_xy;
     CtrlOmega(2) = config.CtrlOmega_z;
+    CtrlZita(0) = config.CtrlZita_xy;
+    CtrlZita(1) = config.CtrlZita_xy;
+    CtrlZita(2) = config.CtrlZita_z;
 
     posErrAccLimit_ = config.PosErrorAccumulatedLimit_xyz;
     k_I_(0) = config.Pos_ki_xy;
