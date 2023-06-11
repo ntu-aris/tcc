@@ -427,7 +427,10 @@ void CtrloopCallback(const ros::TimerEvent&)
     if (stop_control)
     {
       // printf("STOPPING CONTROL\n");
-      rpyrt_msg.thrust.z = 0;
+      rpyrt_msg.roll = 0.0;
+      rpyrt_msg.pitch = 0.0;      
+      rpyrt_msg.yaw_rate = 0.0;
+      rpyrt_msg.thrust.z = 0.0;
     }
 
     if (sim_type_!="vins_st"&&sim_type_!="sim_st"){
