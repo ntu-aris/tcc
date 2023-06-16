@@ -2,7 +2,7 @@
 <launch>
 
   <!-- Configuring control package-->
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="vinsfusion_dji_mini" />
       <param name="mpc_sim" type="bool" value="false" />

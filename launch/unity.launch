@@ -9,7 +9,7 @@
   <arg name="namespace" default="$(arg mav_name)"/> 
   <group ns="$(arg namespace)1">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />
@@ -42,7 +42,7 @@
 
   <group ns="$(arg namespace)2">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />
@@ -63,7 +63,7 @@
 
   <group ns="$(arg namespace)3">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />
@@ -84,7 +84,7 @@
 
   <group ns="$(arg namespace)4">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />
@@ -105,7 +105,7 @@
 
     <group ns="$(arg namespace)5">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />
@@ -126,7 +126,7 @@
 
     <group ns="$(arg namespace)6">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />
@@ -157,7 +157,7 @@
 
     <group ns="$(arg namespace)7">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />
@@ -178,7 +178,7 @@
 
     <group ns="$(arg namespace)8">
 
-  <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+  <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen">
       <param name="frame_id" type="string" value="world" />
       <param name="sim_type" type="string" value="$(arg sim_type)" />
       <param name="mpc_sim" type="bool" value="false" />

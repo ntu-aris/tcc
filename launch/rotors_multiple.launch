@@ -29,7 +29,7 @@
 
 
     <!-- Spawning the ground station -->
-    <include file="$(find tcc)/launch/spawn_gcs.launch">
+    <include file="$(find unicon)/launch/spawn_gcs.launch">
 
         <arg name="namespace"         value="gcs" />
         <arg name="model"             value="$(find rotors_description)/urdf/gcs.xacro" />
@@ -45,7 +45,7 @@
 
 
     <!-- Spawning one drone -->
-    <include file="$(find tcc)/launch/rotors_single.launch">
+    <include file="$(find unicon)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="jurong" />
@@ -60,7 +60,7 @@
 
 
     <!-- Spawning another drone -->
-    <include file="$(find tcc)/launch/rotors_single.launch">
+    <include file="$(find unicon)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="raffles" />
@@ -75,7 +75,7 @@
 
 
     <!-- Spawning another drone -->
-    <include file="$(find tcc)/launch/rotors_single.launch">
+    <include file="$(find unicon)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="sentosa" />
@@ -90,7 +90,7 @@
 
 
     <!-- Spawning another drone -->
-    <include file="$(find tcc)/launch/rotors_single.launch">
+    <include file="$(find unicon)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="changi" />
@@ -105,7 +105,7 @@
 
 
     <!-- Spawning another drone -->
-    <include file="$(find tcc)/launch/rotors_single.launch">
+    <include file="$(find unicon)/launch/rotors_single.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="nanyang" />

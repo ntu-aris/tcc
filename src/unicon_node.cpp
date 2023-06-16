@@ -2,20 +2,20 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <cstdio>
-#include "tcc/in_loop_cmd_generator.h"
-#include "tcc/geometry_math_type.h"
+#include "unicon/in_loop_cmd_generator.h"
+#include "unicon/geometry_math_type.h"
 #include <trajectory_msgs/MultiDOFJointTrajectory.h>
 #include <mav_msgs/RollPitchYawrateThrust.h>
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_datatypes.h>
-#include <tcc/ParamConfig.h>
+#include <unicon/ParamConfig.h>
 #include <dynamic_reconfigure/server.h>
 #include <Eigen/Sparse>
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Vector3.h>
 // #include "ooqp_eigen_interface/OoqpEigenInterface.hpp"
 // #include "ooqp_eigen_interface/ooqpei_gtest_eigen.hpp"
-#include "tcc/Stop.h"
+#include "unicon/Stop.h"
 
 typedef Eigen::Triplet<double> Trip;
 ros::Publisher rpyt_command_pub;
@@ -27,7 +27,7 @@ double offset_heading_=0.0, offset_altitude_=0.0;
 void CtrloopCallback(const ros::TimerEvent&);
 void trajectory_cb(const trajectory_msgs::MultiDOFJointTrajectory::ConstPtr& msg);
 void odom_cb(const nav_msgs::Odometry::ConstPtr& msg);
-void Paramcallback(tcc::ParamConfig &config, uint32_t level);
+void Paramcallback(unicon::ParamConfig &config, uint32_t level);
 void offsets_cb(const geometry_msgs::Vector3::ConstPtr& msg);
 
 void geoVec3toEigenVec3 (geometry_msgs::Vector3 geoVector3, Eigen::Vector3f& eigenVec3);
@@ -61,7 +61,7 @@ enum moveState { holdPos, yawOnly, moving, idle };
 moveState droneState = idle;
 bool stop_control = false;
 bool hold_pos_ = true;
-bool stop_srv_cb(tcc::Stop::Request &req, tcc::Stop::Response &res)
+bool stop_srv_cb(unicon::Stop::Request &req, unicon::Stop::Response &res)
 {
   stop_control = true;
   res.result = 1;
@@ -69,13 +69,13 @@ bool stop_srv_cb(tcc::Stop::Request &req, tcc::Stop::Response &res)
 }
 
 int main(int argc, char** argv){
-  ros::init(argc, argv, "tcc");
+  ros::init(argc, argv, "unicon");
 
   ros::NodeHandle nh;
   ros::NodeHandle pnh("~"); //node handle just for getting param
 
-  dynamic_reconfigure::Server<tcc::ParamConfig> server;
-  dynamic_reconfigure::Server<tcc::ParamConfig>::CallbackType externalfunction;
+  dynamic_reconfigure::Server<unicon::ParamConfig> server;
+  dynamic_reconfigure::Server<unicon::ParamConfig>::CallbackType externalfunction;
   externalfunction = boost::bind(&Paramcallback, _1, _2);
   server.setCallback(externalfunction);
   if (!pnh.getParam("sim_type", sim_type_)){
@@ -498,7 +498,7 @@ void CtrloopCallback(const ros::TimerEvent&)
 }
 
 
-void Paramcallback(tcc::ParamConfig &config, uint32_t level)
+void Paramcallback(unicon::ParamConfig &config, uint32_t level)
 {
 
     CtrlOmega(0) = config.CtrlOmega_xy;
